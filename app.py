@@ -14,13 +14,15 @@ def split_frame(input_df, rows):
     df = [input_df.loc[i : i + rows - 1, :] for i in range(0, len(input_df), rows)]
     return df
 
+# Use context manager to manage the database connection
+# Learn more about context managers: https://realpython.com/python-with-statement/
 with Database(os.getenv('DATABASE_URL')) as pg:
     pg.create_table()
     df = pd.read_sql('SELECT * FROM quotes', pg.con)
 
-
     st.title('Quote Generator')
 
+    # Create a placeholder
     container = st.container()
 
     bottom_menu = st.columns((4, 2, 1))
@@ -36,7 +38,7 @@ with Database(os.getenv('DATABASE_URL')) as pg:
     with bottom_menu[0]:
         st.markdown(f"Page **{current_page}** of **{total_pages}** ")
 
-
-
     pages = split_frame(df, batch_size)
+
+    # Write the dataframe component to the previously created container
     container.dataframe(data=pages[current_page - 1], use_container_width=True)
