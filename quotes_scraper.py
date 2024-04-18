@@ -12,7 +12,7 @@ with Database(os.getenv('DATABASE_URL')) as pg:
     pg.create_table()
 
     # TODO: use argparse to enable truncating table
-    pg.truncate_table()
+    #pg.truncate_table()
 
     quotes = []
     page = 1
