@@ -9,6 +9,7 @@ from db import Database
 load_dotenv()
 
 # reference: https://medium.com/streamlit/paginating-dataframes-with-streamlit-2da29b080920
+# Basically, we are splitting the dataframe into smaller dataframes based on the number of rows
 def split_frame(input_df, rows):
     df = [input_df.loc[i : i + rows - 1, :] for i in range(0, len(input_df), rows)]
     return df
