@@ -14,13 +14,12 @@ class Database:
 
     def create_table(self):
         q = """
-        CREATE TABLE IF NOT EXISTS quotes (
+        CREATE TABLE IF NOT EXISTS books (
             id SERIAL PRIMARY KEY,
-            content TEXT NOT NULL,
-            author TEXT NOT NULL,
-            tags TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            name VARCHAR(255),
+            rating SMALLINT,
+            price NUMERIC(10, 2),
+            description TEXT
         );
         """
         self.cur.execute(q)
@@ -33,9 +32,16 @@ class Database:
         self.cur.execute(q)
         self.con.commit()
     
-    def insert_quote(self, quote):
+    def insert_quote(self, book):
         q = """
-        INSERT INTO quotes (content, author, tags) VALUES (%s, %s, %s)
+        INSERT INTO books (name, rating, price, description) VALUES (%s, %s, %s, %s)
         """
-        self.cur.execute(q, (quote['content'], quote['author'], quote['tags'],))
+        self.cur.execute(q, (book['name'], book['rating'], book['price'], book['description']))
         self.con.commit()
+    
+    def insert_all_books(self, books):
+        q = """
+        INSERT INTO books (name, rating, price, description) VALUES (%s, %s, %s, %s)
+        """
+        psycopg2.extras.execute_batch(self.cur, q, books)
+        self.con.commit()        
